@@ -1,7 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
-
+#include <random>
 
 class Card
 {
@@ -68,12 +68,19 @@ public:
 		return cards[0]._card_back();
 	}
 
-	void print_name()
+	std::string print_name()
 	{
-		std::cout << name;
+		return name;
+	}
+
+	std::vector<Card> return_cards()
+	{
+		return cards;
 	}
 };
 
+
+//Creates a new deck and adds it to the vector of decks
 Deck new_deck(std::vector<Deck> decks)
 {
 	Deck deck;
@@ -83,6 +90,43 @@ Deck new_deck(std::vector<Deck> decks)
 
 	return deck;
 }
+
+
+//Shows the contents of deck vector
+void view(std::vector<Deck> decks)
+{
+	for (int i = 0; i < decks.size(); i++)
+	{
+		std::cout << i << ". " << decks[i].print_name() << std::endl;
+	}
+}
+
+
+//Shuffling the deck to review the cards
+void review(Deck deck)
+{
+	std::vector<Card> cards = deck.return_cards();
+	int size = cards.size();
+	for (int i = 0; i < size*10; i++)
+	{
+		int range = size + 1;
+		int rand1 = rand() % range;
+		int rand2 = rand() % range;
+
+		Card temp = cards[rand1];
+		cards[rand1] = cards[rand2];
+		cards[rand2] = temp;
+	}
+	char enter;
+	for (int i = 0; i < size; i++)
+	{
+		std::cout << cards[i]._card_front() << std::endl;
+		std::cout << "Press enter to view the back" << std::endl;
+		std::cin >> enter;
+		std::cout << cards[i]._card_back() << std::endl;
+	}
+}
+
 
 int main()
 {
@@ -95,8 +139,8 @@ int main()
 	{
 		std::cout << "Choices:" << std::endl;
 		std::cout << "1. Create New Deck" << std::endl;
-		std::cout << "2." << std::endl;
-		std::cout << "3." << std::endl;
+		std::cout << "2. View Contents" << std::endl;
+		std::cout << "3. Review Deck" << std::endl;
 		std::cout << "4. End." << std::endl;
 
 		std::cout << "input the number of your choice:";
@@ -118,10 +162,17 @@ int main()
 
 			break;
 		case 2:
+			std::cout << "List of decks created:" << std::endl;
+			view(decks);
 
 			break;
 		case 3:
+			int num;
 
+			std::cout << "What deck do you want to review? enter the view number:" << std::endl;
+			std::cin >> num;
+			review(decks[num - 1]);
+			
 			break;
 		case 4:
 
