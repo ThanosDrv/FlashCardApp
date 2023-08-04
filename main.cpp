@@ -58,16 +58,6 @@ public:
 		std::cin >> name;
 	}
 
-	std::string Front()
-	{
-		return cards[0]._card_front();
-	}
-
-	std::string Back()
-	{
-		return cards[0]._card_back();
-	}
-
 	std::string print_name()
 	{
 		return name;
@@ -132,6 +122,8 @@ int main()
 {
 	bool f = true;
 	int choice;
+	int num;
+	char answer = 'y';
 
 	std::vector<Deck> decks;
 
@@ -141,14 +133,15 @@ int main()
 		std::cout << "1. Create New Deck" << std::endl;
 		std::cout << "2. View Contents" << std::endl;
 		std::cout << "3. Review Deck" << std::endl;
-		std::cout << "4. End." << std::endl;
+		std::cout << "4. Add a card to the deck" << std::endl;
+		std::cout << "5. End." << std::endl;
 
 		std::cout << "input the number of your choice:";
 		std::cin >> choice;
 
-		while (choice < 1 || choice > 4)
+		while (choice < 1 || choice > 5)
 		{
-			std::cout << "invalid choice. Please try again:" << std::endl;
+			std::cout << "invalid choice. Please try again: " << std::endl;
 			std::cin >> choice;
 		}
 
@@ -161,20 +154,44 @@ int main()
 			std::cout << "A new deck has been created with the name:" << decks.back().print_name() << std::endl;
 
 			break;
+
 		case 2:
 			std::cout << "List of decks created:" << std::endl;
 			view(decks);
 
 			break;
-		case 3:
-			int num;
 
+		case 3:
 			std::cout << "What deck do you want to review? enter the view number:" << std::endl;
 			std::cin >> num;
-			review(decks[num - 1]);
+			while (num > decks.size() || num < 0)
+			{
+				std::cout << "Invalid value. Try again:" << std::endl;
+				std::cin >> num;
+			}
+			review(decks[num]);
 			
 			break;
+
 		case 4:
+			while (answer == 'y')
+			{
+				std::cout << "Enter the number of the deck you want to add cards:" << std::endl;
+				std::cin >> num;
+
+				while (num < 0 || num > decks.size())
+				{
+					std::cout << "invalid value. Try again:" << std::endl;
+					std::cin >> num;
+				}
+				decks[num].add_card();
+
+				std::cout << "Do you want to add more cards? (y/n)" << std::endl;
+				std::cin >> answer;
+			}
+
+			break;
+		case 5:
 
 			f = false;
 			break;
